@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MvcApiTokenVideoJuegos.Models.VideoJuego>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Expo Videojuegos</h1>
+
+<p>
+    <a class="btn btn-success" asp-controller="VideoJuegos" asp-action="NewVideoJuego">Agregar</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imagen)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Precio)
+            </td>
+            <td>
+                <img src="@item.Imagen" style="width:150px; height:auto"/>
+            </td>
+            <td>
+                <a asp-controller="VideoJuegos" asp-action="Details" asp-route-idvideojuego="@item.IdVideojuego" class="btn btn-info">Detalles</a>
+                <a asp-controller="VideoJuegos" asp-action="UpdateVideoJuego" asp-route-idvideojuego="@item.IdVideojuego" class="btn btn-warning">Editar</a>
+                <a asp-controller="VideoJuegos" asp-action="DeleteVideoJuego" asp-route-idvideojuego="@item.IdVideojuego" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
