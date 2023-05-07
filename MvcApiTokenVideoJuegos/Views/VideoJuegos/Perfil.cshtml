@@ -29,7 +29,7 @@
             @Html.DisplayFor(model => model.Password)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Imagen)
+            <img style="width:100px; width:200px" src="@Model.Imagen" />
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Imagen)
@@ -37,6 +37,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-controller="VideoJuegos" asp-action="ModificarFotoPerfil">Modificar</a>
     <a asp-action="Index">Back to List</a>
 </div>

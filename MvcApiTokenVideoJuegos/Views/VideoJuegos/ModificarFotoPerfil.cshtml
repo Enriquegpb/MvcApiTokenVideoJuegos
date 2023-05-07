@@ -1,0 +1,18 @@
+﻿@model MvcApiTokenVideoJuegos.Models.UsuarioGaming
+
+<h1>Modificar Foto Perfil</h1>
+
+<h4>UsuarioGaming</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" class="form-control" />
+            <button class="btn btn-warning">Cambiar Imagen de usuario</button>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

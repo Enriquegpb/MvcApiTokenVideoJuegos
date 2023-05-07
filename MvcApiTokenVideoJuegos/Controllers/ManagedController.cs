@@ -36,6 +36,8 @@ namespace MvcApiTokenVideoJuegos.Controllers
                     ClaimTypes.Name, ClaimTypes.Role);
                 identity.AddClaim(new Claim(ClaimTypes.Name, username));
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, password));
+                
+
 
                 ClaimsPrincipal userPrincipal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,

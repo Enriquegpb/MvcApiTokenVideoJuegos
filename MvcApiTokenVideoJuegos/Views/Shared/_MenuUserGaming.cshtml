@@ -1,9 +1,10 @@
-﻿@if(Context.User.Identity.IsAuthenticated){
+﻿
+@if(Context.User.Identity.IsAuthenticated){
     <li class="nav-item">
         <a class="nav-link text-black" asp-controller="VideoJuegos" asp-action="Index">VideoJuegos</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-black" asp-controller="VideoJuegos" asp-action="Perfil">Perfil @Context.User.Identity.Name</a>
+        <a class="nav-link text-black" asp-controller="VideoJuegos" asp-action="Perfil"> @Context.User.Identity.Name</a>
     </li> 
     <li class="nav-item">
         <a class="nav-link text-black" asp-controller="Managed" asp-action="LogOut">LogOut @Context.User.Identity.Name</a>
