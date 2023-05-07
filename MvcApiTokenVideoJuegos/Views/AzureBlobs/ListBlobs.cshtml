@@ -1,0 +1,21 @@
+﻿@model List<BlobModel>
+
+<h1 style="color:darkcyan">
+    List de los Blobs
+
+</h1>
+<a asp-controller="AzureBlobs" asp-action="ListContainers">
+    Volver
+</a>
+<form method="post">
+    <ul class="list-group">
+        @foreach(BlobModel blob in Model){
+            @blob.Nombre
+            <img src="@blob.Url" style="width:150px; height:auto" />
+            <a asp-controller="AzureBlobs" asp-action="DeleteBlob"
+            asp-route-containerName="@blob.Contenedor" asp-route-blobname="@blob.Nombre" class="btn btn-danger">
+            Elimanar Blob
+        </a>
+        }
+    </ul>
+</form>

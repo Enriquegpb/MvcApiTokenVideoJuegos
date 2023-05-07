@@ -1,0 +1,26 @@
+﻿<h1 style="color: fuchsia">
+    Azure Storage Contianers
+</h1>
+
+<a asp-controller="AzureBlobs" asp-action="CreateContainer" class="btn btn-success">Create Container</a>
+
+@if(Model !=null){
+    <ul class="list-group">
+        @foreach(string container in Model)
+        {
+            <li class="list-group-item">
+                @container
+                <a asp-controller="AzureBlobs" asp-action="ListBlobs" asp-route-containername="@container" class="btn btn-info">
+                    Blobs
+                </a>
+                <a asp-controller="AzureBlobs" asp-action="UploadBlob" asp-route-containername="@container" class="btn btn-warning">
+                    Upload Blob
+                </a>
+                <a asp-controller="AzureBlobs" asp-action="DeleteContainer" asp-route-containername="@container" class="btn btn-danger">
+                    Delete Contianer
+                </a>
+                
+            </li>
+        }
+    </ul>
+}

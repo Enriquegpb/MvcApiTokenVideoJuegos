@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Sas;
+using Microsoft.AspNetCore.Mvc;
 using MvcApiTokenVideoJuegos.Filters;
 using MvcApiTokenVideoJuegos.Models;
 using MvcApiTokenVideoJuegos.Services;
@@ -8,9 +10,15 @@ namespace MvcApiTokenVideoJuegos.Controllers
     public class VideoJuegosController : Controller
     {
         private ServiceApiVideoJuegos service;
-        public VideoJuegosController(ServiceApiVideoJuegos service)
+        private ServiceStorageBlobs serviceStorageBlobs;
+        private string containerName;
+        public VideoJuegosController(ServiceApiVideoJuegos service, ServiceStorageBlobs serviceStorageBlobs, IConfiguration configuration)
         {
             this.service = service;
+            this.serviceStorageBlobs = serviceStorageBlobs;
+            this.containerName =
+                 configuration.GetValue<string>("BlobContainers:VideoJuegosContainerName");
+
         }
         [AuthorizeUsuariosVideoJuegos]
         public async Task<IActionResult> Perfil()
@@ -53,9 +61,14 @@ namespace MvcApiTokenVideoJuegos.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> NewVideoJuego(int idvideojuego, string nombre, string descripcion, int precio, string imagen)
+        public async Task<IActionResult> NewVideoJuego(int idvideojuego, string nombre, string descripcion, int precio, IFormFile file)
         {
-            await this.service.NewVideoJuegoAsync(idvideojuego, nombre, descripcion, precio, imagen);
+            string blobName = file.FileName;
+            using (Stream stream = file.OpenReadStream())
+            {
+                await this.serviceStorageBlobs.UploadBlobAsync(this.containerName, blobName, stream);
+            }
+            await this.service.NewVideoJuegoAsync(idvideojuego, nombre, descripcion, precio, await this.serviceStorageBlobs.GetBlobUriAsync(this.containerName, blobName));
             return RedirectToAction("Index");
         } 
         public async Task <IActionResult> UpdateVideoJuego(int idvideojuego)
@@ -64,15 +77,25 @@ namespace MvcApiTokenVideoJuegos.Controllers
             return View(videojuego);
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateVideoJuego(int idvideojuego, string nombre, string descripcion, int precio, string imagen)
+        public async Task<IActionResult> UpdateVideoJuego(int idvideojuego, string nombre, string descripcion, int precio, IFormFile file)
         {
-            await this.service.UpdateVideoJuegoAsync(idvideojuego, nombre, descripcion, precio, imagen);
+            string blobName = file.FileName;
+            using (Stream stream = file.OpenReadStream())
+            {
+                await this.serviceStorageBlobs.UploadBlobAsync(this.containerName, blobName, stream);
+            }
+            await this.serviceStorageBlobs.DeleteContainerAsync(this.containerName);
+            await this.service.NewVideoJuegoAsync(idvideojuego, nombre, descripcion, precio, await this.serviceStorageBlobs.GetBlobUriAsync(this.containerName, blobName));
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> DeleteVideoJuego(int idvideojuego)
         {
-             await this.service.DeleteVideoJuegoAsync(idvideojuego);
+            VideoJuego videoJuego = await this.service.FindVideoJuegoAsync(idvideojuego);
+            string blobName = Path.GetFileName(videoJuego.Imagen);
+            await this.serviceStorageBlobs.DeleteBlobAsync(this.containerName, blobName);
+            await this.service.DeleteVideoJuegoAsync(idvideojuego);
             return RedirectToAction("Index");
         }
+       
     }
 }

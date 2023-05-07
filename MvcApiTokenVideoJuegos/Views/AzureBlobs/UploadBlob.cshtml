@@ -1,0 +1,8 @@
+﻿<h1 style="color: brown">Crear el blob</h1>
+<form method="post" enctype="multipart/form-data" >
+    <label>Seleccione un fichero</label>
+    <input type="file" name="file" />
+    <input type="hidden" name="containername"
+        value="@ViewData["CONTAINER"]" />
+        <button class="btn btn-info">Cargar</button>
+    </form>
